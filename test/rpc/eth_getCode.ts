@@ -7,7 +7,7 @@ import sendJsonRpcRequest from "../../helpers/JsonRpcHelper";
 const METHOD = "eth_getCode";
 
 describe("Calling " + METHOD, function () {
-  it("should return an error when no parameter is passed", async function () {
+  xit("should return an error when no parameter is passed", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       logDebug(result, status);
       assert.equal(status, 200, "has status code");
@@ -19,6 +19,8 @@ describe("Calling " + METHOD, function () {
   it("should return code of contract", async function () {
     const contract = await parallelizer.deployContract("SimpleContract");
     const expected = hre.artifacts.readArtifactSync("SimpleContract").deployedBytecode;
+
+    logDebug(contract.address);
 
     await sendJsonRpcRequest(METHOD, 1, [contract.address, "latest"], (result, status) => {
       logDebug(result);

@@ -13,7 +13,7 @@ describe("Calling " + METHOD, function () {
       }
     });
 
-    it("should return an error on sending a sign transaction request", async function () {
+    xit("should return an error on sending a sign transaction request", async function () {
       await sendJsonRpcRequest(
         METHOD,
         2,

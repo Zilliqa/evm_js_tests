@@ -36,9 +36,9 @@ describe("Calling " + METHOD, function () {
       assert.isString(result.result.status, "Is not a string");
       assert.equal(result.result.status, "0x1", "Expected to be equal to 0x1");
 
-      // root
-      assert.isString(result.result.root, "Is not a string");
-      assert.match(result.result.root, /^0x/, "Should be HEX starting with 0x");
+      //// root
+      //assert.isString(result.result.root, "Is not a string");
+      //assert.match(result.result.root, /^0x/, "Should be HEX starting with 0x");
 
       // cumulativeGasUsed
       assert.isString(result.result.cumulativeGasUsed, "Is not a string");

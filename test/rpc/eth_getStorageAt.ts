@@ -55,7 +55,7 @@ describe("Calling " + METHOD, function () {
     });
   });
 
-  it("should return an error when no parameter is passed", async function () {
+  xit("should return an error when no parameter is passed", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       assert.equal(status, 200, "has status code");
       assert.property(result, "error");

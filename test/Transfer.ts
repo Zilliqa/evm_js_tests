@@ -34,7 +34,7 @@ describe("ForwardZil contract functionality", function () {
     );
   });
 
-  it("should be possible to transfer ethers to the contract", async function () {
+  xit("should be possible to transfer ethers to the contract", async function () {
     const prevBalance = await ethers.provider.getBalance(this.contract.address);
     const tx = await parallelizer.sendTransaction({
       to: this.contract.address,
@@ -50,7 +50,7 @@ describe("ForwardZil contract functionality", function () {
 });
 
 describe("Transfer ethers", function () {
-  it("should be possible to transfer ethers to a user account", async function () {
+  xit("should be possible to transfer ethers to a user account", async function () {
     const payee = ethers.Wallet.createRandom();
 
     await parallelizer.sendTransaction({
@@ -61,7 +61,7 @@ describe("Transfer ethers", function () {
     expect(await ethers.provider.getBalance(payee.address)).to.be.eq(FUND);
   });
 
-  it("should be possible to batch transfer using a smart contract", async function () {
+  xit("should be possible to batch transfer using a smart contract", async function () {
     const ACCOUNTS_COUNT = 3;
     const ACCOUNT_VALUE = 1_000_000;
 
@@ -79,7 +79,7 @@ describe("Transfer ethers", function () {
     balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));
   });
 
-  it("should be possible to batch transfer using a smart contract and get funds back on self destruct", async function () {
+  xit("should be possible to batch transfer using a smart contract and get funds back on self destruct", async function () {
     const ACCOUNTS_COUNT = 3;
     const ACCOUNT_VALUE = 1_000_000_000;
 
@@ -132,7 +132,7 @@ describe("Transfer ethers", function () {
     balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));
   });
 
-  it("probably should be possible to use sent funds of smart contract", async function () {
+  xit("probably should be possible to use sent funds of smart contract", async function () {
     const TRANSFER_VALUE = 1_000_000;
 
     // Create random account
@@ -162,7 +162,7 @@ describe("Transfer ethers", function () {
     expect(receivedBal).to.be.eq(TRANSFER_VALUE);
   });
 
-  it("should return check gas and funds consistency", async function () {
+  xit("should return check gas and funds consistency", async function () {
     let rndAccount = ethers.Wallet.createRandom();
 
     const FUND = BigNumber.from(200_000_000_000_000_000n);

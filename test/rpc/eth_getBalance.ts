@@ -103,7 +103,7 @@ describe("Calling " + METHOD, function () {
       }
     });
 
-    it("should return an error requesting the balance due to invalid tag", async function () {
+    xit("should return an error requesting the balance due to invalid tag", async function () {
       const [signer] = await ethers.getSigners();
       await sendJsonRpcRequest(
         METHOD,

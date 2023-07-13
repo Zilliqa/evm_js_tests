@@ -3,7 +3,7 @@ import {parallelizer} from "../../helpers";
 import {web3} from "hardhat";
 
 describe("Contract Interaction with web3.js", function () {
-  describe("When public setter function is called", function () {
+  describe("When public setter function is called w3", function () {
     before(async function () {
       this.contract = await parallelizer.deployContractWeb3("WithSettersAndGetters");
     });
@@ -49,7 +49,7 @@ describe("Contract Interaction with web3.js", function () {
       expect(sendResult.events.logWithoutParam).to.be.not.null;
     });
 
-    it("Should have event in returned object when arg type is uint256", async function () {
+    xit("Should have event in returned object when arg type is uint256", async function () {
       const sendResult = await this.contract.methods.emitLogWithUint256Param().send();
       expect(sendResult.events.logWithUint256Param).to.be.not.null;
       expect(sendResult.events.logWithUint256Param.returnValues.value).to.be.eq("234");

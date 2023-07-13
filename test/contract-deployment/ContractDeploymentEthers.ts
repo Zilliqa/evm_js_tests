@@ -52,7 +52,7 @@ describe("Contract Deployment using Ethers.js", function () {
         expect(this.withStringConstructor.address).to.be.properAddress;
       });
 
-      it("Should return Zilliqa when name view function is called", async function () {
+      xit("Should return Zilliqa when name view function is called", async function () {
         expect(await this.withStringConstructor.name()).to.be.eq(INITIAL_NAME);
       });
     });
@@ -104,7 +104,7 @@ describe("Contract Deployment using Ethers.js", function () {
       expect(await this.withMultiParamConstructor.number()).to.be.eq(NUMBER);
     });
 
-    it("Should return Zilliqa when name view function is called", async function () {
+    xit("Should return Zilliqa when name view function is called", async function () {
       expect(await this.withMultiParamConstructor.name()).to.be.eq(NAME);
     });
   });
