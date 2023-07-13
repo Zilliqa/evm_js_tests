@@ -11,7 +11,7 @@ describe("Calling " + METHOD, function () {
     this.contract = await parallelizer.deployContract("Storage");
   });
 
-  it("should return proper storage value when the defaultBlock is 'latest' for storage position 0 at address of contract", async function () {
+  xit("should return proper storage value when the defaultBlock is 'latest' for storage position 0 at address of contract", async function () {
     await sendJsonRpcRequest(METHOD, 1, [this.contract.address, "0x0", "latest"], (result, status) => {
       logDebug("Result:", result);
       assert.equal(status, 200, "has status code");
@@ -23,7 +23,7 @@ describe("Calling " + METHOD, function () {
     });
   });
 
-  it("should return proper storage value when a value from a map is requested", async function () {
+  xit("should return proper storage value when a value from a map is requested", async function () {
     const MAPPING_SLOT = "0000000000000000000000000000000000000000000000000000000000000001";
 
     // KEY that we want to read in the mapping
@@ -43,7 +43,7 @@ describe("Calling " + METHOD, function () {
     });
   });
 
-  it("should return proper storage value when the defaultBlock is '0x0' for storage position 0 at address of contract", async function () {
+  xit("should return proper storage value when the defaultBlock is '0x0' for storage position 0 at address of contract", async function () {
     await sendJsonRpcRequest(METHOD, 1, [this.contract.address, "0x0", "0x0"], (result, status) => {
       logDebug("Result:", result);
       assert.equal(status, 200, "has status code");

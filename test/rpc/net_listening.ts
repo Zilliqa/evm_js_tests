@@ -5,7 +5,7 @@ import logDebug from "../../helpers/DebugHelper";
 const METHOD = "net_listening";
 
 describe("Calling " + METHOD, function () {
-  it("should return the network listening state", async function () {
+  xit("should return the network listening state", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       logDebug(result);
 

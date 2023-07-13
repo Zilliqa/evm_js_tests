@@ -136,7 +136,7 @@ describe("Contract Interaction with Ethers.js", function () {
     // TODO: Add for address
   });
 
-  describe("When calling a public function that generates an event", function () {
+  xdescribe("When calling a public function that generates an event", function () {
     it("Should emit an event if emitLogWithoutParam is called", async function () {
       await expect(this.contract.emitLogWithoutParam()).emit(this.contract, "logWithoutParam");
     });

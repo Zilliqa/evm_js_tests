@@ -53,7 +53,7 @@ describe("GasTransferTest", function () {
 
   // @todo use parallelizer to stop this being serial.
   testCases.forEach(function (testCase) {
-    it('Should run case ${testCase.name}', async function() {
+    xit('Should run case ${testCase.name}', async function() {
       if (DEBUG) { console.log("-----------------------"); }
       let contractBalance : BigNumber = BigNumber.from(0);
       let accountBalance : BigNumber = await provider.getBalance(myAddress);

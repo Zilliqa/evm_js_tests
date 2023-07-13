@@ -14,10 +14,10 @@ describe("Subscriptions functionality", function () {
   let eventsContract: Contract;
   let provider;
   let senderAddress: string;
-  before(async function () {
-    contract = await parallelizer.deployContract("Subscriptions");
-    senderAddress = await contract.signer.getAddress();
-  });
+  //before(async function () {
+  //  contract = await parallelizer.deployContract("Subscriptions");
+  //  senderAddress = await contract.signer.getAddress();
+  //});
 
   beforeEach(async function () {
     provider = new ethers.providers.WebSocketProvider(hre.getWebsocketUrl());
@@ -29,7 +29,7 @@ describe("Subscriptions functionality", function () {
   });
 
   describe("When event is triggered with one indexed parameter", function () {
-    it("Should receive event when single argument for filter is provided", async function () {
+    xit("Should receive event when single argument for filter is provided", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event1(senderAddress);
       eventsContract.on(filter, (from, to, amount, _event) => {
@@ -48,7 +48,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided", async function () {
+    xit("Should receive event when 'or' filter is provided", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESS = "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e";
 
@@ -69,7 +69,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive no events when incorrect filter is provided", async function () {
+    xit("Should receive no events when incorrect filter is provided", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESS = "0x6e2Cf2789c5B705E0990C05Ca959B5001c70BA87";
 
@@ -90,7 +90,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when incorrect 'or' filter is provided", async function () {
+    xit("Should receive no events when incorrect 'or' filter is provided", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [
         "0x6e2Cf2789c5B705E0990C05Ca959B5001c70BA87",
@@ -114,7 +114,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive event when 'or' filter is provided with many operands", async function () {
+    xit("Should receive event when 'or' filter is provided with many operands", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [
         "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e",

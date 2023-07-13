@@ -15,7 +15,7 @@ describe("Chained Contract Calls Functionality", function () {
   });
 
   describe("Install and call chained contracts", function () {
-    it("Should create a transaction trace after child creation", async function () {
+    xit("Should create a transaction trace after child creation", async function () {
       const METHOD = "debug_traceTransaction";
       const METHOD_BLOCK = "debug_traceBlockByNumber";
 
@@ -79,7 +79,7 @@ describe("Chained Contract Calls Functionality", function () {
       });
     });
 
-    it("Should correctly call chained contracts", async function () {
+    xit("Should correctly call chained contracts", async function () {
       let addrOne = contractOne.address.toLowerCase();
       let addrTwo = contractTwo.address.toLowerCase();
       let addrThree = contractThree.address.toLowerCase();

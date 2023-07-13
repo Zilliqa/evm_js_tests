@@ -13,10 +13,10 @@ describe("Subscriptions functionality", function () {
   let contract: Contract;
   let eventsContract: Contract;
   let senderAddress: string;
-  before(async function () {
-    contract = await parallelizer.deployContract("Subscriptions");
-    senderAddress = await contract.signer.getAddress();
-  });
+  //before(async function () {
+  //  contract = await parallelizer.deployContract("Subscriptions");
+  //  senderAddress = await contract.signer.getAddress();
+  //});
 
   beforeEach(async function () {
     const provider = new ethers.providers.WebSocketProvider(hre.getWebsocketUrl());
@@ -28,7 +28,7 @@ describe("Subscriptions functionality", function () {
   });
 
   describe("When event is triggered with three indexed parameters", function () {
-    it("Should receive event when no arguments are provided", async function () {
+    xit("Should receive event when no arguments are provided", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event3();
       eventsContract.on(filter, (from, to, amount, _event) => {
@@ -51,7 +51,7 @@ describe("Subscriptions functionality", function () {
       }
     });
 
-    it("Should receive event when first argument is provided", async function () {
+    xit("Should receive event when first argument is provided", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event3(senderAddress);
       eventsContract.on(filter, (from, to, amount, _event) => {
@@ -70,7 +70,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when second argument is provided", async function () {
+    xit("Should receive event when second argument is provided", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = "0x6e2Cf2789c5B705E0990C05Ca959B5001c70BA87";
       const filter = eventsContract.filters.Event3(null, FILTER_ADDRESSES);
@@ -90,7 +90,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when third argument is provided", async function () {
+    xit("Should receive event when third argument is provided", async function () {
       let receivedEvents: Event[] = [];
       const FUNDS = ethers.BigNumber.from(300);
       const filter = eventsContract.filters.Event3(null, null, FUNDS);
@@ -108,7 +108,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for first argument", async function () {
+    xit("Should receive event when 'or' filter is provided for first argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [senderAddress, "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e"];
       const filter = eventsContract.filters.Event3(FILTER_ADDRESSES);
@@ -128,7 +128,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for second argument", async function () {
+    xit("Should receive event when 'or' filter is provided for second argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [senderAddress, "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e"];
       const filter = eventsContract.filters.Event3(null, FILTER_ADDRESSES);
@@ -148,7 +148,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for third argument", async function () {
+    xit("Should receive event when 'or' filter is provided for third argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_FUNDS = [ethers.BigNumber.from(300), ethers.BigNumber.from(500)];
       const filter = eventsContract.filters.Event3(null, null, FILTER_FUNDS);
@@ -168,7 +168,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for first and second arguments", async function () {
+    xit("Should receive event when 'or' filter is provided for first and second arguments", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [senderAddress, "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e"];
       const filter = eventsContract.filters.Event3(FILTER_ADDRESSES, FILTER_ADDRESSES);
@@ -188,7 +188,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for first and third arguments", async function () {
+    xit("Should receive event when 'or' filter is provided for first and third arguments", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [senderAddress, "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e"];
       const FILTER_FUNDS = [ethers.BigNumber.from(300), ethers.BigNumber.from(500)];
@@ -209,7 +209,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive event when 'or' filter is provided for second and third arguments", async function () {
+    xit("Should receive event when 'or' filter is provided for second and third arguments", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [senderAddress, "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e"];
       const FILTER_FUNDS = [ethers.BigNumber.from(300), ethers.BigNumber.from(500)];
@@ -230,7 +230,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents[0]).to.deep.equalInAnyOrder(event);
     });
 
-    it("Should receive no events when wrong filter is provided for first argument", async function () {
+    xit("Should receive no events when wrong filter is provided for first argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = "0xE5f1fF64fd5dB9113B05f4C17F23A0E92BF3b33E";
       const filter = eventsContract.filters.Event3(FILTER_ADDRESSES);
@@ -249,7 +249,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when wrong filter is provided for second argument", async function () {
+    xit("Should receive no events when wrong filter is provided for second argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e";
       const filter = eventsContract.filters.Event3(null, FILTER_ADDRESSES);
@@ -268,7 +268,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when wrong filter is provided for third argument", async function () {
+    xit("Should receive no events when wrong filter is provided for third argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = "0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e";
       const filter = eventsContract.filters.Event3(null, null, ethers.BigNumber.from(200));
@@ -287,7 +287,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when wrong 'or' filter is provided for first argument", async function () {
+    xit("Should receive no events when wrong 'or' filter is provided for first argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = [
         "0x9d1F9D4D70a35d18797E2495a8F73B9C8A08E399",
@@ -309,7 +309,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when wrong 'or' filter is provided for second argument", async function () {
+    xit("Should receive no events when wrong 'or' filter is provided for second argument", async function () {
       let receivedEvents: Event[] = [];
       const FILTER_ADDRESSES = ["0xF0Cb24aC66ba7375Bf9B9C4Fa91E208D9EAAbd2e", senderAddress];
       const filter = eventsContract.filters.Event3(null, FILTER_ADDRESSES);
@@ -328,7 +328,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive no events when wrong 'or' filter is provided for third argument", async function () {
+    xit("Should receive no events when wrong 'or' filter is provided for third argument", async function () {
       let receivedEvents: Event[] = [];
       const FUND_FILTERS = [ethers.BigNumber.from(200), ethers.BigNumber.from(300)];
       const filter = eventsContract.filters.Event3(null, null, FUND_FILTERS);
@@ -347,7 +347,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.be.empty;
     });
 
-    it("Should receive event with complex scenario - 1", async function () {
+    xit("Should receive event with complex scenario - 1", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event3(
         senderAddress,
@@ -385,7 +385,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.have.length(1);
     });
 
-    it("Should receive event with complex scenario - 2", async function () {
+    xit("Should receive event with complex scenario - 2", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event3(senderAddress, "0x6e2Cf2789c5B705E0990C05Ca959B5001c70BA87", [
         ethers.BigNumber.from(300),

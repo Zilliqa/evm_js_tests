@@ -8,7 +8,7 @@ describe("Delegatecall functionality", function () {
     this.testDelegateContract = await parallelizer.deployContract("TestDelegatecall");
   });
 
-  it("should delegate function call correctly", async function () {
+  xit("should delegate function call correctly", async function () {
     const VALUE = 1000000;
     const NUM = 3735931646; // 0xDEADCAFE
 

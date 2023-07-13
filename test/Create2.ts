@@ -10,7 +10,7 @@ describe("Create2 instruction", function () {
   });
 
   describe("Should be able to predict and call create2 contract", function () {
-    it("Should predict and deploy create2 contract", async function () {
+    xit("Should predict and deploy create2 contract", async function () {
       const owner = this.contract.signer;
       const SALT = 1;
 

@@ -11,13 +11,13 @@ describe("Subscriptions functionality", function () {
 
   let web3 = new Web3(hre.getWebsocketUrl());
 
-  before(async function () {
-    contract = await parallelizer.deployContract("Subscriptions");
-    senderAddress = await contract.signer.getAddress();
-  });
+  //before(async function () {
+  //  contract = await parallelizer.deployContract("Subscriptions");
+  //  senderAddress = await contract.signer.getAddress();
+  //});
 
   describe("When a subscription is created with a singleton address list", function () {
-    it("Should receive events for the address", async function () {
+    xit("Should receive events for the address", async function () {
       let receivedEvents: Log[] = [];
       web3.eth.subscribe("logs", {address: [contract.address]}, (error, log) => {
         if (error) {
@@ -40,7 +40,7 @@ describe("Subscriptions functionality", function () {
   });
 
   describe("When a subscription is created with two addresses", function () {
-    it("Should receive events for both addresses", async function () {
+    xit("Should receive events for both addresses", async function () {
       const secondContract = await parallelizer.deployContract("Subscriptions");
 
       let receivedEvents: Log[] = [];

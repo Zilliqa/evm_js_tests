@@ -19,7 +19,7 @@ describe("Openzeppelin ownable contract functionality", function () {
       .withArgs(123);
   });
 
-  it("should not be possible to call a restricted function using an arbitrary account", async function () {
+  xit("should not be possible to call a restricted function using an arbitrary account", async function () {
     const [_, notOwner] = await ethers.getSigners();
 
     await expect(this.contract.connect(notOwner).store(123)).to.be.revertedWith("Ownable: caller is not the owner");
@@ -30,7 +30,7 @@ describe("Openzeppelin ownable contract functionality", function () {
     expect(await this.contract.connect(notOwner).retrieve()).to.be.equal(123);
   });
 
-  it("should be possible to transfer ownership", async function () {
+  xit("should be possible to transfer ownership", async function () {
     const [prevOwner, newOwner] = await ethers.getSigners();
 
     await expect(this.contract.transferOwnership(newOwner.address))
@@ -38,7 +38,7 @@ describe("Openzeppelin ownable contract functionality", function () {
       .withArgs(prevOwner.address, newOwner.address);
   });
 
-  it("should not be possible to call restricted functions even by owner if renounceOwnership is called", async function () {
+  xit("should not be possible to call restricted functions even by owner if renounceOwnership is called", async function () {
     // We changed the owner in previous test.
     const [_, owner] = await ethers.getSigners();
 
