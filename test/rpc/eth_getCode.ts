@@ -20,7 +20,6 @@ describe("Calling " + METHOD, function () {
     const contract = await parallelizer.deployContract("SimpleContract");
     const expected = hre.artifacts.readArtifactSync("SimpleContract").deployedBytecode;
 
-    console.log("contract addr: ", contract.address);
     logDebug(contract.address);
 
     await sendJsonRpcRequest(METHOD, 1, [contract.address, "latest"], (result, status) => {

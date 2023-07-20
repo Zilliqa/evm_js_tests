@@ -113,8 +113,6 @@ describe("Calling " + METHOD, function () {
           logDebug(result);
 
           assert.equal(status, 200, "has status code");
-          //assert.equal(result.error.code, errorCode);
-          //assert.equal(result.error.message, expectedErrorMessage);
         }
       );
     });

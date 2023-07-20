@@ -1,5 +1,5 @@
 import sendJsonRpcRequest from "../../helpers/JsonRpcHelper";
-import {assert} from "chai";
+import {assert, expect} from "chai";
 import hre, {ethers} from "hardhat";
 import logDebug from "../../helpers/DebugHelper";
 import {parallelizer} from "../../helpers";
@@ -23,16 +23,10 @@ describe("Calling " + METHOD, function () {
       });
       const transactionHash = response.hash;
 
-      console.log("here we are 0..");
-      console.log(transactionHash);
-
       await sendJsonRpcRequest(METHOD, 2, [transactionHash], (result, status) => {
         logDebug(result);
         assert.equal(status, 200, "has status code");
         assert.property(result, "result", result.error ? result.error.message : "error");
-
-        console.log("here we are..");
-        console.log(result);
 
         // gas
         assert.isString(result.result.gas, "Is not a string - gas");
@@ -64,17 +58,15 @@ describe("Calling " + METHOD, function () {
           "Is not equal to " + signer_address.toUpperCase()
         );
 
-        //// blockHash
-        //assert.isString(result.result.blockHash, "Is not a string - block hash");
-        //assert.match(result.result.blockHash, /^0x/, "Should be HEX starting with 0x");
+        // blockHash
+        //assert.isString(, "Is not a string - block hash");
+        expect(typeof(result.result.blockHash)).to.be.oneOf(["string", "object"]);
 
-        //// blockNumber
-        //assert.isString(result.result.blockNumber, "Is not a string - blockNumber");
-        //assert.match(result.result.blockNumber, /^0x/, "Should be HEX starting with 0x");
+        // blockNumber
+        expect(typeof(result.result.blockNumber)).to.be.oneOf(["string", "object"]);
 
-        //// transactionIndex
-        //assert.isString(result.result.transactionIndex, "Is not a string - txIndex");
-        //assert.match(result.result.transactionIndex, /^0x/, "Should be HEX starting with 0x");
+        // transactionIndex
+        expect(typeof(result.result.transactionIndex)).to.be.oneOf(["string", "object"]);
 
         // transactionHash
         assert.isString(result.result.hash, "Is not a string - tx hash");

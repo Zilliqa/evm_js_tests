@@ -78,10 +78,6 @@ describe("Calling " + METHOD, function () {
       assert.isNumber(result.error.code, "Is not a number");
       assert.oneOf(result.error.code, [-32602, -32603]);
       assert.isString(result.error.message, "is string");
-      //assert.equal(
-      //  result.error.message,
-      //  "INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised"
-      //);
     });
   });
 
@@ -93,10 +89,6 @@ describe("Calling " + METHOD, function () {
       assert.isNumber(result.error.code, "Is not a number");
       assert.oneOf(result.error.code, [-32602, -32603]);
       assert.isString(result.error.message, "is string");
-      //assert.equal(
-      //  result.error.message,
-      //  "INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised"
-      //);
     });
   });
 
