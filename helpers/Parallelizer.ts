@@ -34,6 +34,7 @@ export class Parallelizer {
     if (hre.isEthernalPluginEnabled()) {
       hre.ethernal.push({name: contractName, address: deployedContract.address});
     }
+    await deployedContract.deployed();
     return deployedContract;
   }
 
