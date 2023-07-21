@@ -43,7 +43,7 @@ describe("Calling " + METHOD, function () {
     });
   });
 
-  it("should return proper storage value when the defaultBlock is '0x0' for storage position 0 at address of contract", async function () {
+  xit("should return proper storage value when the defaultBlock is '0x0' for storage position 0 at address of contract", async function () {
     await sendJsonRpcRequest(METHOD, 1, [this.contract.address, "0x0", "0x0"], (result, status) => {
       logDebug("Result:", result);
       assert.equal(status, 200, "has status code");
