@@ -32,10 +32,6 @@ describe("Calling " + METHOD, function () {
         assert.isString(result.result.gas, "Is not a string - gas");
         assert.match(result.result.gas, /^0x/, "Should be HEX starting with 0x");
 
-        //// gasLimit
-        //assert.isString(result.result.gasLimit, "Is not a string - gasLimit");
-        //assert.match(result.result.gasLimit, /^0x/, "Should be HEX starting with 0x");
-
         // gasPrice
         assert.isString(result.result.gasPrice, "Is not a string - gasPrice");
         assert.match(result.result.gasPrice, /^0x/, "Should be HEX starting with 0x");
