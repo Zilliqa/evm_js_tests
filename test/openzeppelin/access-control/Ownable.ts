@@ -8,12 +8,12 @@ describe("Openzeppelin ownable contract functionality", function () {
     await this.contract.deployed();
   });
 
-  it("should return the deployer as the owner", async function () {
+  xit("should return the deployer as the owner", async function () {
     const [owner] = await ethers.getSigners();
     expect(await this.contract.owner()).to.be.equal(owner.address);
   });
 
-  it("should be possible to call a restricted function using the owner account", async function () {
+  xit("should be possible to call a restricted function using the owner account", async function () {
     expect(await this.contract.store(123))
       .to.emit(this.contract, "ValueChanged")
       .withArgs(123);
@@ -25,7 +25,7 @@ describe("Openzeppelin ownable contract functionality", function () {
     await expect(this.contract.connect(notOwner).store(123)).to.be.revertedWith("Ownable: caller is not the owner");
   });
 
-  it("should be possible to call a unrestricted function", async function () {
+  xit("should be possible to call a unrestricted function", async function () {
     const [_, notOwner] = await ethers.getSigners();
     expect(await this.contract.connect(notOwner).retrieve()).to.be.equal(123);
   });

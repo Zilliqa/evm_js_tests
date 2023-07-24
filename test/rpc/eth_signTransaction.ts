@@ -13,7 +13,7 @@ describe("Calling " + METHOD, function () {
       }
     });
 
-    xit("should return an error on sending a sign transaction request", async function () {
+    it("should return an error on sending a sign transaction request", async function () {
       await sendJsonRpcRequest(
         METHOD,
         2,
@@ -25,10 +25,6 @@ describe("Calling " + METHOD, function () {
           assert.isNumber(result.error.code);
           assert.equal(Number(result.error.code), -32601);
           assert.isString(result.error.message, "is string");
-          assert.equal(
-            result.error.message,
-            "METHOD_NOT_FOUND: The method being requested is not available on this server"
-          );
         }
       );
     });

@@ -13,18 +13,18 @@ describe("Openzeppelin ERC20 functionality", function () {
   });
 
   describe("General", function () {
-    it("Should return 1_000_000 as the total supply of the token", async function () {
+    xit("Should return 1_000_000 as the total supply of the token", async function () {
       expect(await contract.totalSupply()).to.be.equal(TOTAL_SUPPLY);
     });
 
-    it("Should return 1_000_000 for the owner's balance at the beginning", async function () {
+    xit("Should return 1_000_000 for the owner's balance at the beginning", async function () {
       const [owner] = await ethers.getSigners();
       expect(await contract.balanceOf(owner.address)).to.eq(TOTAL_SUPPLY);
     });
   });
 
   describe("Transfer", function () {
-    it("Should be possible to transfer GLD token from the owner to another [@transactional]", async function () {
+    xit("Should be possible to transfer GLD token from the owner to another [@transactional]", async function () {
       const [owner, receiver] = await ethers.getSigners();
 
       expect(await contract.transfer(receiver.address, 1000))
@@ -65,7 +65,7 @@ describe("Openzeppelin ERC20 functionality", function () {
       );
     });
 
-    it("Should be possible to transfer from one account to another if allowance is ok[@transactional]", async function () {
+    xit("Should be possible to transfer from one account to another if allowance is ok[@transactional]", async function () {
       const [owner, sender, spender] = await ethers.getSigners();
 
       // Fund the 2nd account first

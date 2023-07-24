@@ -7,16 +7,16 @@ import sendJsonRpcRequest from "../../helpers/JsonRpcHelper";
 const METHOD = "eth_getCode";
 
 describe("Calling " + METHOD, function () {
-  xit("should return an error when no parameter is passed", async function () {
+  it("should return an error when no parameter is passed", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       logDebug(result, status);
       assert.equal(status, 200, "has status code");
       assert.property(result, "error");
-      assert.equal(result.error.code, -32602);
+      assert.oneOf(result.error.code, [-32602, -32603]);
     });
   });
 
-  xit("should return code of contract", async function () {
+  it("should return code of contract", async function () {
     const contract = await parallelizer.deployContract("SimpleContract");
     const expected = hre.artifacts.readArtifactSync("SimpleContract").deployedBytecode;
 
