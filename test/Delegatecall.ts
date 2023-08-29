@@ -4,8 +4,8 @@ import {ethers} from "hardhat";
 
 describe("Delegatecall functionality", function () {
   before(async function () {
-    this.delegateContract = await parallelizer.deployContract("Delegatecall");
-    this.testDelegateContract = await parallelizer.deployContract("TestDelegatecall");
+    //this.delegateContract = await parallelizer.deployContract("Delegatecall");
+    //this.testDelegateContract = await parallelizer.deployContract("TestDelegatecall");
   });
 
   xit("should delegate function call correctly", async function () {

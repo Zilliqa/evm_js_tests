@@ -5,8 +5,8 @@ import {Signer} from "ethers";
 describe("While Calling a method on erroneous contract with given gas limit", function () {
   let signer: Signer;
   before(async function () {
-    signer = await parallelizer.takeSigner();
-    this.contract = await parallelizer.deployContractWithSigner(signer, "Erroneous");
+    //signer = await parallelizer.takeSigner();
+    //this.contract = await parallelizer.deployContractWithSigner(signer, "Erroneous");
   });
 
   xit("it should return to the client and nonce/balance should be affected", async function () {

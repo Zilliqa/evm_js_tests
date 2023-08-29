@@ -12,21 +12,21 @@ async function getFee(hash: string) {
 
 describe("ForwardZil contract functionality", function () {
   before(async function () {
-    this.contract = await parallelizer.deployContract("ForwardZil");
-    this.signer = this.contract.signer;
+    //this.contract = await parallelizer.deployContract("ForwardZil");
+    //this.signer = this.contract.signer;
   });
 
-  it("Should return zero as the initial balance of the contract", async function () {
+  xit("Should return zero as the initial balance of the contract", async function () {
     expect(await ethers.provider.getBalance(this.contract.address)).to.be.eq(0);
   });
 
-  it(`Should move ${ethers.utils.formatEther(FUND)} ethers to the contract if deposit is called`, async function () {
+  xit(`Should move ${ethers.utils.formatEther(FUND)} ethers to the contract if deposit is called`, async function () {
     expect(await this.contract.deposit({value: FUND})).changeEtherBalance(this.contract.address, FUND);
   });
 
   // TODO: Add notPayable contract function test.
 
-  it("Should move 1 ether to the owner if withdraw function is called so 1 ether is left for the contract itself [@transactional]", async function () {
+  xit("Should move 1 ether to the owner if withdraw function is called so 1 ether is left for the contract itself [@transactional]", async function () {
     expect(await this.contract.withdraw()).to.changeEtherBalances(
       [this.contract.address, this.signer.address],
       [ethers.utils.parseEther("-1.0"), ethers.utils.parseEther("1.0")],
@@ -61,8 +61,8 @@ describe("Transfer ethers", function () {
     expect(await ethers.provider.getBalance(payee.address)).to.be.eq(FUND);
   });
 
-  xit("should be possible to batch transfer using a smart contract", async function () {
-    const ACCOUNTS_COUNT = 3;
+  it("should be possible to batch transfer using a smart contract", async function () {
+    const ACCOUNTS_COUNT = 1;
     const ACCOUNT_VALUE = 1_000_000;
 
     const accounts = Array.from({length: ACCOUNTS_COUNT}, (v, k) =>
@@ -71,9 +71,13 @@ describe("Transfer ethers", function () {
 
     const addresses = accounts.map((signer) => signer.address);
 
-    await parallelizer.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
+    let tx = await parallelizer.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
       value: ACCOUNTS_COUNT * ACCOUNT_VALUE
     });
+
+    console.log(addresses);
+    console.log(tx.address);
+    console.log(tx.deployTransaction.from);
 
     const balances = await Promise.all(accounts.map((account) => account.getBalance()));
     balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));

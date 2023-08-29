@@ -6,7 +6,7 @@ import hre, {web3} from "hardhat";
 
 describe("Create2 instruction", function () {
   before(async function () {
-    this.contract = await parallelizer.deployContract("Create2Factory");
+    //this.contract = await parallelizer.deployContract("Create2Factory");
   });
 
   describe("Should be able to predict and call create2 contract", function () {

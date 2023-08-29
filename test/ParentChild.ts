@@ -10,7 +10,7 @@ describe("Parent Child Contract Functionality", function () {
   let parentContract: Contract;
 
   before(async function () {
-    //parentContract = await parallelizer.deployContract("ParentContract", {value: INITIAL_FUND});
+    parentContract = await parallelizer.deployContract("ParentContract", {value: INITIAL_FUND});
   });
 
   describe("General", function () {
@@ -26,12 +26,12 @@ describe("Parent Child Contract Functionality", function () {
   describe("Install Child", function () {
     const CHILD_CONTRACT_VALUE = 12345;
     before(async function () {
-      // Because childContractAddress is used in almost all of the following tests, xit should be done in `before` block.
-      //this.installedChild = await parentContract.installChild(CHILD_CONTRACT_VALUE, {gasLimit: 25000000});
-      //this.childContractAddress = await parentContract.childAddress();
+      // Because childContractAddress is used in almost all of the following tests, it should be done in `before` block.
+      this.installedChild = await parentContract.installChild(CHILD_CONTRACT_VALUE, {gasLimit: 25000000});
+      this.childContractAddress = await parentContract.childAddress();
     });
 
-    xit("Should instantiate a new child if installChild is called", async function () {
+    it("Should instantiate a new child if installChild is called", async function () {
       expect(this.childContractAddress).to.be.properAddress;
     });
 
