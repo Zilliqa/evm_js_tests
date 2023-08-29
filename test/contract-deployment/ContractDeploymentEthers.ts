@@ -20,6 +20,7 @@ describe("Contract Deployment using Ethers.js", function () {
     });
 
     it("Should return 123 when number view function is called", async function () {
+      console.log("this is: ", this.zeroParamConstructor);
       expect(await this.zeroParamConstructor.number()).to.be.eq(123);
     });
   });
