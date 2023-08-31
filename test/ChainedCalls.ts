@@ -9,9 +9,11 @@ describe("Chained Contract Calls Functionality", function () {
   let contractThree: Contract;
 
   before(async function () {
+    console.log("deploying!");
     contractOne = await parallelizer.deployContract("ContractOne");
     contractTwo = await parallelizer.deployContract("ContractTwo");
     contractThree = await parallelizer.deployContract("ContractThree");
+    console.log("deployed!");
   });
 
   describe("Install and call chained contracts", function () {
