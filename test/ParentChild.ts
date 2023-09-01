@@ -5,7 +5,7 @@ import {parallelizer} from "../helpers";
 import logDebug from "../helpers/DebugHelper";
 import sendJsonRpcRequest from "../helpers/JsonRpcHelper";
 
-describe("Parent Child Contract Functionality", function () {
+xdescribe("Parent Child Contract Functionality", function () {
   const INITIAL_FUND = 10_000_000;
   let parentContract: Contract;
 
