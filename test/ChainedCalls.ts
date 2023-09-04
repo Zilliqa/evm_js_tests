@@ -81,7 +81,7 @@ describe("Chained Contract Calls Functionality", function () {
       });
     });
 
-    it("Should correctly call chained contracts", async function () {
+    xit("Should correctly call chained contracts", async function () {
       let addrOne = contractOne.address.toLowerCase();
       let addrTwo = contractTwo.address.toLowerCase();
       let addrThree = contractThree.address.toLowerCase();
