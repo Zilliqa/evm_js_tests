@@ -8,7 +8,7 @@ describe("Contract Interaction with web3.js", function () {
       this.contract = await parallelizer.deployContractWeb3("WithSettersAndGetters");
     });
 
-    xit("Should set uint256 internal state correctly", async function () {
+    it("Should set uint256 internal state correctly", async function () {
       const TO_BE_SET = 100;
       expect(await this.contract.methods.setNumber(TO_BE_SET).send()).to.be.not.null;
       expect(await this.contract.methods.number().call()).to.be.eq(web3.utils.toBN(TO_BE_SET));
