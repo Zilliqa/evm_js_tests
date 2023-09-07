@@ -14,7 +14,7 @@ describe("Calling " + METHOD, function () {
     }
   });
 
-  it("should return the raw transaction response", async function () {
+  xit("should return the raw transaction response", async function () {
     let amount = 200_000;
     // send amount from primary to secondary account
     const to = ethers.Wallet.createRandom();

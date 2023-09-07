@@ -17,10 +17,8 @@ export default class SignerPool {
   }
 
   public async takeSigner(): Promise<Wallet> {
-    console.log("INIT0001");
     if (this.signers.length == 0) {
       // Need to create new signers
-      console.log("INIT000");
       await this.initSigners();
     }
 
