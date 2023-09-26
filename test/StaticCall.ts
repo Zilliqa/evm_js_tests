@@ -8,8 +8,8 @@ describe("Static Contract Calls Functionality", function () {
   let caller: Contract;
 
   before(async function () {
-    called = await parallelizer.deployContract("Called");
-    caller = await parallelizer.deployContract("Caller");
+    //called = await parallelizer.deployContract("Called");
+    //caller = await parallelizer.deployContract("Caller");
   });
 
   describe("Static calls to contracts should not modify their value", function () {

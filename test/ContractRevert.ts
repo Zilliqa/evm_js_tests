@@ -5,8 +5,8 @@ import {expectRevert} from "@openzeppelin/test-helpers";
 // FIXME: Can't be parallelized yet. Needs ZIL-5055
 describe("Revert Contract Call", function () {
   before(async function () {
-    const Contract = await ethers.getContractFactory("Revert");
-    this.contract = await Contract.deploy();
+    //const Contract = await ethers.getContractFactory("Revert");
+    //this.contract = await Contract.deploy();
   });
 
   xit("Will revert the transaction when revert is called", async function () {
