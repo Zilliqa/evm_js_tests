@@ -21,20 +21,8 @@ describe("Create2 instruction", function () {
       // Ask the contract what the deployed address would be for this salt and owner
       const addrDerived = await this.contract.getAddress(byteCode, SALT);
 
-      console.log("bytecode is: ", byteCode);
       const deployResult = await this.contract.deploy(SALT, {gasLimit: 25000000});
-      console.log("deploxx: ", deployResult);
-      //while (deployResult.waiting) {
-      //  console.log("waiting...");
-      await deployResult.wait(20);
-      //}
       //await deployResult.wait(20);
-      //await deployResult.deployed();
-
-      //while (deployResult.)
-      console.log("deployy: ", deployResult);
-      console.log("deployed... owner address is: ", owner.address);
-      console.log("deployed... derived address is: ", addrDerived);
 
       // Using the address we calculated, point at the deployed contract
       const deployedContract = new web3.eth.Contract(
@@ -45,15 +33,11 @@ describe("Create2 instruction", function () {
         }
       );
 
-      console.log("deployed contract...", deployedContract);
-
       // Check the owner is correct
-      const oT = await deployedContract.methods.getOwner();
-      console.log("making call to owner.", oT);
-      const ownerTestCall = await oT.call();
+      const ownerTest = await deployedContract.methods.getOwner().call();
 
-      expect(ownerTestCall).to.be.properAddress;
-      expect(ownerTestCall).to.be.eq(ownerAddr);
+      expect(ownerTest).to.be.properAddress;
+      expect(ownerTest).to.be.eq(ownerAddr);
     });
   });
 });
