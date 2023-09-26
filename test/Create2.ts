@@ -22,7 +22,7 @@ describe("Create2 instruction", function () {
       const addrDerived = await this.contract.getAddress(byteCode, SALT);
 
       const deployResult = await this.contract.deploy(SALT, {gasLimit: 25000000});
-      //await deployResult.wait(20);
+      await deployResult.wait(20);
 
       // Using the address we calculated, point at the deployed contract
       const deployedContract = new web3.eth.Contract(
