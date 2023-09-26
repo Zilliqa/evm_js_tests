@@ -5,7 +5,7 @@ import {parallelizer} from "../helpers";
 import logDebug from "../helpers/DebugHelper";
 import sendJsonRpcRequest from "../helpers/JsonRpcHelper";
 
-xdescribe("Parent Child Contract Functionality", function () {
+describe("Parent Child Contract Functionality", function () {
   const INITIAL_FUND = 10_000_000;
   let parentContract: Contract;
 
@@ -14,11 +14,11 @@ xdescribe("Parent Child Contract Functionality", function () {
   });
 
   describe("General", function () {
-    xit(`Should return ${INITIAL_FUND} when getPaidValue is called`, async function () {
+    it(`Should return ${INITIAL_FUND} when getPaidValue is called`, async function () {
       expect(await parentContract.getPaidValue()).to.be.equal(INITIAL_FUND);
     });
 
-    xit(`Should return ${INITIAL_FUND} as the balance of the parent contract`, async function () {
+    it(`Should return ${INITIAL_FUND} as the balance of the parent contract`, async function () {
       expect(await ethers.provider.getBalance(parentContract.address)).to.be.eq(INITIAL_FUND);
     });
   });
@@ -35,17 +35,17 @@ xdescribe("Parent Child Contract Functionality", function () {
       expect(this.childContractAddress).to.be.properAddress;
     });
 
-    xit(`Should return ${INITIAL_FUND} as the balance of the child contract`, async function () {
+    it(`Should return ${INITIAL_FUND} as the balance of the child contract`, async function () {
       expect(await ethers.provider.getBalance(this.childContractAddress)).to.be.eq(INITIAL_FUND);
     });
 
-    xit(`Should return ${CHILD_CONTRACT_VALUE} when read function of the child is called`, async function () {
+    it(`Should return ${CHILD_CONTRACT_VALUE} when read function of the child is called`, async function () {
       this.childContract = await hre.ethers.getContractAt("ChildContract", this.childContractAddress);
       this.childContract = this.childContract.connect(parentContract.signer);
       expect(await this.childContract.read()).to.be.eq(CHILD_CONTRACT_VALUE);
     });
 
-    xit("Should create a transaction trace after child creation", async function () {
+    it("Should create a transaction trace after child creation", async function () {
       const METHOD = "debug_traceTransaction";
 
       await sendJsonRpcRequest(METHOD, 1, [this.installedChild.hash], (result, status) => {
@@ -56,11 +56,11 @@ xdescribe("Parent Child Contract Functionality", function () {
       });
     });
 
-    xit("Should return parent address if sender function of child is called", async function () {
+    it("Should return parent address if sender function of child is called", async function () {
       expect(await this.childContract.sender()).to.be.eq(parentContract.address);
     });
 
-    xit("Should return all funds from the child to its sender contract if returnToSender is called", async function () {
+    it("Should return all funds from the child to its sender contract if returnToSender is called", async function () {
       await this.childContract.returnToSender();
       expect(await ethers.provider.getBalance(parentContract.address)).to.be.eq(INITIAL_FUND);
       expect(await ethers.provider.getBalance(this.childContract.address)).to.be.eq(0);
