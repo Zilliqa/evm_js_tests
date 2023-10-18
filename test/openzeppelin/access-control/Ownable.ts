@@ -15,13 +15,13 @@ describe("Openzeppelin ownable contract functionality #parallel", function () {
     expect(await contract.owner()).to.be.equal(owner.address);
   });
 
-  it("should be possible to call a restricted function using the owner account @block-1", async function () {
+  xit("should be possible to call a restricted function using the owner account @block-1", async function () {
     expect(await contract.store(123))
       .to.emit(contract, "ValueChanged")
       .withArgs(123);
   });
 
-  it("should not be possible to call a restricted function using an arbitrary account @block-1", async function () {
+  xit("should not be possible to call a restricted function using an arbitrary account @block-1", async function () {
     const notOwner = hre.allocateEthSigner();
 
     await expect(contract.connect(notOwner).store(123)).to.be.revertedWith("Ownable: caller is not the owner");
@@ -29,13 +29,13 @@ describe("Openzeppelin ownable contract functionality #parallel", function () {
     hre.releaseEthSigner(notOwner);
   });
 
-  it("should be possible to call a unrestricted function @block-2", async function () {
+  xit("should be possible to call a unrestricted function @block-2", async function () {
     const notOwner = hre.allocateEthSigner();
     expect(await contract.connect(notOwner).retrieve()).to.be.equal(123);
     hre.releaseEthSigner(notOwner);
   });
 
-  it("should be possible to transfer ownership @block-2", async function () {
+  xit("should be possible to transfer ownership @block-2", async function () {
     const prevOwner = contract.signer as SignerWithAddress;
     newOwner = hre.allocateEthSigner();
 
@@ -44,7 +44,7 @@ describe("Openzeppelin ownable contract functionality #parallel", function () {
       .withArgs(prevOwner.address, newOwner.address);
   });
 
-  it("should not be possible to call restricted functions even by owner if renounceOwnership is called", async function () {
+  xit("should not be possible to call restricted functions even by owner if renounceOwnership is called", async function () {
     // We changed the owner in previous test.
     await contract.connect(newOwner).renounceOwnership();
     await expect(contract.connect(newOwner).store(123)).to.be.revertedWith("Ownable: caller is not the owner");

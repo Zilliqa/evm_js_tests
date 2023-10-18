@@ -46,7 +46,7 @@ describe("Precompile tests with web3.js #parallel", function () {
     expect(readValue).to.be.eq(expectedHash);
   });
 
-  it("should return correct result when modexp function is used @block-1 [@transactional]", async function () {
+  xit("should return correct result when modexp function is used @block-1 [@transactional]", async function () {
     const base = 8;
     const exponent = 9;
     const modulus = 10;

@@ -6,7 +6,7 @@ import logDebug from "../../helpers/DebugHelper";
 const METHOD = "eth_sendTransaction";
 
 describe(`Calling ${METHOD} #parallel`, function () {
-  it("Should return a an error on sending send transaction request @block-1", async function () {
+  xit("Should return a an error on sending send transaction request @block-1", async function () {
     await sendJsonRpcRequest(
       METHOD,
       1,

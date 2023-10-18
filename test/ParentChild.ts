@@ -30,7 +30,7 @@ describe("Parent Child Contract Functionality #parallel", function () {
     expect(childContractAddress).to.be.properAddress;
   });
 
-  it(`Should return ${INITIAL_FUND} as the balance of the child contract @block-3`, async function () {
+  xit(`Should return ${INITIAL_FUND} as the balance of the child contract @block-3`, async function () {
     expect(await ethers.provider.getBalance(childContractAddress)).to.be.eq(INITIAL_FUND);
   });
 

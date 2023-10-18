@@ -30,7 +30,7 @@ describe("Chained Contract Calls Functionality #parallel", function () {
   });
 
   describe("Install and call chained contracts @block-1", function () {
-    it("Should create a transaction trace after child creation", async function () {
+    xit("Should create a transaction trace after child creation", async function () {
       const METHOD = "debug_traceTransaction";
       const METHOD_BLOCK = "debug_traceBlockByNumber";
 

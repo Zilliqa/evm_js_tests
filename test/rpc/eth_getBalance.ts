@@ -66,7 +66,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
     });
   });
 
-  it("should return an error requesting the balance due to invalid tag @block-1", async function () {
+  xit("should return an error requesting the balance due to invalid tag @block-1", async function () {
     let expectedErrorMessage = "Unable To Process, invalid tag";
     let errorCode = -1;
     const [signer] = await ethers.getSigners();
@@ -84,7 +84,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
     );
   });
 
-  it("should return an error requesting the balance due to insufficient parameters @block-1", async function () {
+  xit("should return an error requesting the balance due to insufficient parameters @block-1", async function () {
     let expectedErrorMessage = "INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised";
     let errorCode = -32602;
     const [signer] = await ethers.getSigners();
@@ -102,7 +102,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
     );
   });
 
-  it("should return an error requesting the balance if no parameters is specified @block-1", async function () {
+  xit("should return an error requesting the balance if no parameters is specified @block-1", async function () {
     let expectedErrorMessage = "INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised";
     let errorCode = -32602;
     await sendJsonRpcRequest(

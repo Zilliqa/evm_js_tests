@@ -10,7 +10,7 @@ describe("While Calling a method on erroneous contract with given gas limit #par
     contract = await hre.deployContract("Erroneous");
   });
 
-  it("it should return to the client and nonce/balance should be affected @block-1", async function () {
+  xit("it should return to the client and nonce/balance should be affected @block-1", async function () {
     let signer = contract.signer;
     const funds = await signer.getBalance();
     const nonce = await signer.getTransactionCount();

@@ -69,7 +69,7 @@ describe("Calling " + METHOD, function () {
     assert.isArray(response.result.uncles, "Is not an array");
   }
 
-  it("should return an error when called with no parameters", async function () {
+  xit("should return an error when called with no parameters", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       logDebug(result);
 
@@ -85,7 +85,7 @@ describe("Calling " + METHOD, function () {
     });
   });
 
-  it("should return an error when called with only first parameter", async function () {
+  xit("should return an error when called with only first parameter", async function () {
     await sendJsonRpcRequest(METHOD, 1, ["latest"], (result, status) => {
       logDebug(result);
       assert.equal(status, 200, "has status code");

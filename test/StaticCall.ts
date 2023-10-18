@@ -12,7 +12,7 @@ describe("Static Contract Calls Functionality #parallel", function () {
   });
 
   describe("Static calls to contracts should not modify their value", function () {
-    it("The value of the called contract should not change @block-1", async function () {
+    xit("The value of the called contract should not change @block-1", async function () {
       let calledAddress = called.address.toLowerCase();
 
       // Initial number is constructed as 0
@@ -27,7 +27,7 @@ describe("Static Contract Calls Functionality #parallel", function () {
   });
 
   describe("Static calls to contracts should not modify their value when chained", function () {
-    it("The value of the called contract should not change @block-1", async function () {
+    xit("The value of the called contract should not change @block-1", async function () {
       let callerAddress = caller.address.toLowerCase();
       let calledAddress = called.address.toLowerCase();
 

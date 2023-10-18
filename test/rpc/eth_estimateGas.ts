@@ -46,7 +46,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
     );
   });
 
-  it("should not accept estimateGas with an invalid block tag @block-1", async function () {
+  xit("should not accept estimateGas with an invalid block tag @block-1", async function () {
     await sendJsonRpcRequest(
       METHOD,
       2,

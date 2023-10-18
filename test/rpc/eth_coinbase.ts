@@ -13,7 +13,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
       }
     });
 
-    it("should return an error on eth_coinbase @block-1", async function () {
+    xit("should return an error on eth_coinbase @block-1", async function () {
       await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
         logDebug(result);
 

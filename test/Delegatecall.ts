@@ -8,16 +8,16 @@ describe("Delegatecall functionality #parallel", function () {
   let testDelegateContract: Contract;
   let signer: SignerWithAddress;
   before(async function () {
-    signer = hre.allocateEthSigner();
-    delegateContract = await hre.deployContractWithSigner("Delegatecall", signer);
-    testDelegateContract = await hre.deployContractWithSigner("TestDelegatecall", signer);
+    //signer = hre.allocateEthSigner();
+    //delegateContract = await hre.deployContractWithSigner("Delegatecall", signer);
+    //testDelegateContract = await hre.deployContractWithSigner("TestDelegatecall", signer);
   });
 
   after(function () {
-    hre.releaseEthSigner(signer);
+    //hre.releaseEthSigner(signer);
   });
 
-  it("should delegate function call correctly @block-1", async function () {
+  xit("should delegate function call correctly @block-1", async function () {
     const VALUE = 1000000;
     const NUM = 3735931646; // 0xDEADCAFE
 

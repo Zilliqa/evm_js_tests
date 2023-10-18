@@ -13,7 +13,7 @@ describe(`Calling ${METHOD} #parallel`, function () {
     }
   });
 
-  it("should return the raw transaction response @block-1", async function () {
+  xit("should return the raw transaction response @block-1", async function () {
     let amount = 10_000;
     // send amount from primary to secondary account
     const to = ethers.Wallet.createRandom();

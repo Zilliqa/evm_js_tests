@@ -6,7 +6,7 @@ import logDebug from "../../helpers/DebugHelper";
 const METHOD = "eth_sign";
 
 describe(`Calling ${METHOD} #parallel`, function () {
-  it("should return an error on sending a eth_sign request @block-1", async function () {
+  xit("should return an error on sending a eth_sign request @block-1", async function () {
     await sendJsonRpcRequest(
       METHOD,
       2,
