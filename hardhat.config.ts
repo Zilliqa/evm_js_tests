@@ -1,8 +1,15 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@nomiclabs/hardhat-web3";
-import clc from "cli-color";
+import {HardhatUserConfig} from "hardhat/types";
 import "dotenv/config";
 import {ENV_VARS} from "./helpers/EnvVarParser";
+
+import "./tasks/ZilBalance";
+import "./tasks/Transfer";
+import "./tasks/InitSigners";
+import "./tasks/SetRewards";
+
+import fs from "fs";
 
 if (ENV_VARS.scilla) {
   require("hardhat-scilla-plugin");
@@ -21,28 +28,57 @@ declare module "hardhat/types/config" {
   }
 }
 
+const loadFromSignersFile = (network_name: string): string[] => {
+  try {
+    return JSON.parse(fs.readFileSync(`.signers/${network_name}.json`, "utf8"));
+  } catch (error) {
+    return [];
+  }
+};
+
 const config: HardhatUserConfig = {
   solidity: "0.8.9",
-
-  ethernal: {
-    disabled: ENV_VARS.ethernalPassword === undefined,
-    email: ENV_VARS.ethernalEmail,
-    password: ENV_VARS.ethernalPassword,
-    workspace: ENV_VARS.ethernalWorkspace,
-    disableSync: false, // If set to true, plugin will not sync blocks & txs
-    disableTrace: false, // If set to true, plugin won't trace transaction
-    uploadAst: true // If set to true, plugin will upload AST, and you'll be able to use the storage feature (longer sync time though)
-  },
   defaultNetwork: "isolated_server",
+
   networks: {
+    public_devnet: {
+      url: "https://api.devnet.zilliqa.com",
+      websocketUrl: "ws://api.devnet.zilliqa.com",
+      accounts: [
+        "4CC853DE4F9FE4A9155185C65B56B6A9B024F896B54528B9E9448B6CD9B8F329",
+        ...loadFromSignersFile("public_devnet")
+      ],
+      chainId: 33385,
+      zilliqaNetwork: true,
+      web3ClientVersion: "Zilliqa/v8.2",
+      protocolVersion: 0x41,
+      miningState: false
+    },
+    zblockchain: {
+      url: "http://localdev-l2api.localdomain",
+      websocketUrl: "ws://localdev-l2api.localdomain",
+      accounts: [
+        "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
+        "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45",
+        "e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411",
+        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
+        ...loadFromSignersFile("zblockchain")
+      ],
+      chainId: 0x82BC,
+      web3ClientVersion: "Zilliqa/v8.2",
+      protocolVersion: 0x41,
+      zilliqaNetwork: true,
+      miningState: false
+    },
     localdev2: {
       url: "http://localdev-l2api.localdomain",
       websocketUrl: "ws://localdev-l2api.localdomain",
       accounts: [
-        "0000000000000000000000000000000000000000000000000000000000000000",
+        "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
         "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45",
         "e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411",
-        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14"
+        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
+        ...loadFromSignersFile("localdev2")
       ],
       chainId: 0x8001,
       web3ClientVersion: "Zilliqa/v8.2",
@@ -51,64 +87,19 @@ const config: HardhatUserConfig = {
       miningState: false
     },
     isolated_server: {
-      url: "http://localhost:4201/",
-      websocketUrl: "ws://localhost:4201/",
+      url: "http://127.0.0.1:4201/",
+      websocketUrl: "ws://127.0.0.1:4201/",
       accounts: [
         "0000000000000000000000000000000000000000000000000000000000000001",
         "0000000000000000000000000000000000000000000000000000000000000002",
         "0000000000000000000000000000000000000000000000000000000000000003",
-        "0000000000000000000000000000000000000000000000000000000000000004"
-      ],
-      chainId: 32769,
-      web3ClientVersion: "zilliqa2/v0.1.0",
-      protocolVersion: 0x41,
-      zilliqaNetwork: true,
-      miningState: false
-    },
-    zq2: {
-      url: "http://localhost:4201/",
-      websocketUrl: "ws://localhost:4201/",
-      accounts: [
-        "65d7f4da9bedc8fb79cbf6722342960bbdfb9759bc0d9e3fb4989e831ccbc227",
-        "62070b1a3b5b30236e43b4f1bfd617e1af7474635558314d46127a708b9d302e",
-        "56d7a450d75c6ba2706ef71da6ca80143ec4971add9c44d7d129a12fa7d3a364",
-        "db670cbff28f4b15297d03fafdab8f5303d68b7591bd59e31eaef215dd0f246a"
+        "0000000000000000000000000000000000000000000000000000000000000004",
+        ...loadFromSignersFile("isolated_server")
       ],
       chainId: 0x8001,
       web3ClientVersion: "Zilliqa/v8.2",
       protocolVersion: 0x41,
       zilliqaNetwork: true,
-      miningState: false
-    },
-    ganache: {
-      url: "http://localhost:7545",
-      websocketUrl: "ws://localhost:7545",
-      chainId: 1337,
-      web3ClientVersion: "Ganache/v7.4.1/EthereumJS TestRPC/v7.4.1/ethereum-js",
-      protocolVersion: 0x3f,
-      accounts: [
-        // memonic: guard same cactus near figure photo remove letter target alien initial remove
-        "67545ce31f5ca86719cf3743730435768515ebf014f84811463edcf7dcfaf91e",
-        "9be4f8840833f64d4881027f4a53961d75bc649ac4801b33f746487ca8873f14",
-        "32a75b674cc41405c914de1fe7b031b832dfd9203e1a287d09122bab689519e3",
-        "dd8ce58f8cecd59fde7000fff9944908e89364b2ef36921c35725957617ddd32"
-      ],
-      zilliqaNetwork: false,
-      miningState: true
-    },
-    devnet: {
-      url: "https://evmdev-l2api.dev.z7a.xyz",
-      websocketUrl: "wss://evmdev-l2api.dev.z7a.xyz",
-      accounts: [
-        "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
-        "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3",
-        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
-        "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45"
-      ],
-      chainId: 33101,
-      zilliqaNetwork: true,
-      web3ClientVersion: "Zilliqa/v8.2",
-      protocolVersion: 0x41,
       miningState: false
     },
     public_testnet: {
@@ -118,24 +109,10 @@ const config: HardhatUserConfig = {
         "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
         "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3",
         "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
-        "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45"
+        "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45",
+        ...loadFromSignersFile("public_testnet")
       ],
       chainId: 33101,
-      zilliqaNetwork: true,
-      web3ClientVersion: "Zilliqa/v8.2",
-      protocolVersion: 0x41,
-      miningState: false
-    },
-    testnet: {
-      url: "https://devnetnh-l2api.dev.z7a.xyz",
-      websocketUrl: "wss://devnetnh-l2api.dev.z7a.xyz",
-      accounts: [
-        "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3",
-        "e53d1c3edaffc7a7bab5418eb836cf75819a82872b4a1a0f1c7fcf5c3e020b89",
-        "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3",
-        "e53d1c3edaffc7a7bab5418eb836cf75819a82872b4a1a0f1c7fcf5c3e020b89"
-      ],
-      chainId: 32769,
       zilliqaNetwork: true,
       web3ClientVersion: "Zilliqa/v8.2",
       protocolVersion: 0x41,
@@ -148,7 +125,8 @@ const config: HardhatUserConfig = {
         "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
         "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45",
         "e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411",
-        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14"
+        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
+        ...loadFromSignersFile("local_network")
       ],
       chainId: 0x8001,
       web3ClientVersion: "Zilliqa/v8.2",
@@ -163,7 +141,8 @@ const config: HardhatUserConfig = {
         "d96e9eb5b782a80ea153c937fa83e5948485fbfc8b7e7c069d7b914dbc350aba",
         "589417286a3213dceb37f8f89bd164c3505a4cec9200c61f7c6db13a30a71b45",
         "e7f59a4beb997a02a13e0d5e025b39a6f0adc64d37bb1e6a849a4863b4680411",
-        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14"
+        "410b0e0a86625a10c554f8248a77c7198917bd9135c15bb28922684826bb9f14",
+        ...loadFromSignersFile("localdev")
       ],
       chainId: 0x8001,
       web3ClientVersion: "Zilliqa/v8.2",
@@ -173,6 +152,7 @@ const config: HardhatUserConfig = {
     }
   },
   mocha: {
+    reporter: ENV_VARS.mochaReporter,
     timeout: ENV_VARS.mochaTimeout,
     jobs: ENV_VARS.mochaWorkers
   }
@@ -180,40 +160,23 @@ const config: HardhatUserConfig = {
 
 // Extend hardhat runtime environment to have some utility functions and variables.
 import "./AddConfigHelpersToHre";
-extendEnvironment((hre) => {
+import {extendEnvironment} from "hardhat/config";
+import SignerPool from "./helpers/parallel-tests/SignerPool";
+extendEnvironment(async (hre) => {
+  const private_keys: string[] = hre.network["config"]["accounts"] as string[];
+
   hre.debug = ENV_VARS.debug;
-  hre.parallel = process.env.MOCHA_WORKER_ID !== undefined;
   hre.scillaTesting = ENV_VARS.scilla;
+  hre.signer_pool = new SignerPool();
+  hre.zilliqaSetup = initZilliqa(hre.getNetworkUrl(), hre.getZilliqaChainId(), private_keys, 30);
 });
 
-task("test")
-  .addFlag("logJsonrpc", "Log JSON RPC ")
-  .addFlag("logTxnid", "Log JSON RPC ")
-  .setAction((taskArgs, hre, runSuper) => {
-    if (taskArgs.logJsonrpc || taskArgs.logTxnid) {
-      hre.ethers.provider.on("debug", (info) => {
-        if (taskArgs.logJsonrpc) {
-          if (info.request) {
-            console.log("Request:", info.request);
-          }
-          if (info.response) {
-            console.log("Response:", info.response);
-          }
-        }
-
-        if (taskArgs.logTxnid) {
-          if (info.request.method == "eth_sendTransaction" || info.request.method == "eth_sendRawTransaction") {
-            console.log(clc.whiteBright.bold(`    📜 Txn ID: ${info.response}`));
-          }
-        }
-      });
-    }
-    return runSuper();
-  });
-
+import "./tasks/Balances";
+import "./tasks/Setup";
+import "./tasks/ParallelTest";
+import "./tasks/Test";
+import "./tasks/ZilBalance";
+import "./tasks/Transfer";
+import "./tasks/InitSigners";
+import {initZilliqa} from "hardhat-scilla-plugin";
 export default config;
-
-
-
-
-
