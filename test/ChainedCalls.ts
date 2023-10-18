@@ -1,21 +1,36 @@
 import {assert, expect} from "chai";
 import {Contract} from "ethers";
-import {parallelizer} from "../helpers";
 import sendJsonRpcRequest from "../helpers/JsonRpcHelper";
+import hre, {ethers} from "hardhat";
 
-describe("Chained Contract Calls Functionality", function () {
+describe("Chained Contract Calls Functionality #parallel", function () {
   let contractOne: Contract;
   let contractTwo: Contract;
   let contractThree: Contract;
 
   before(async function () {
-    //contractOne = await parallelizer.deployContract("ContractOne");
-    //contractTwo = await parallelizer.deployContract("ContractTwo");
-    //contractThree = await parallelizer.deployContract("ContractThree");
+    if (hre.parallel) {
+      [contractOne, contractTwo, contractThree] = await Promise.all([
+        await hre.deployContract("ContractOne"),
+        await hre.deployContract("ContractTwo"),
+        await hre.deployContract("ContractThree")
+      ]);
+    } else {
+      contractOne = await hre.deployContract("ContractOne");
+      contractTwo = await hre.deployContract("ContractTwo");
+      contractThree = await hre.deployContract("ContractThree");
+    }
+
+    // Make sure tracing is enabled
+    const METHOD = "ots_enable";
+
+    await sendJsonRpcRequest(METHOD, 1, [true], (result, status) => {
+      assert.equal(status, 200, "has status code");
+    });
   });
 
-  describe("Install and call chained contracts", function () {
-    xit("Should create a transaction trace after child creation", async function () {
+  describe("Install and call chained contracts @block-1", function () {
+    it("Should create a transaction trace after child creation", async function () {
       const METHOD = "debug_traceTransaction";
       const METHOD_BLOCK = "debug_traceBlockByNumber";
 
@@ -79,7 +94,7 @@ describe("Chained Contract Calls Functionality", function () {
       });
     });
 
-    xit("Should correctly call chained contracts", async function () {
+    it("Should correctly call chained contracts @block-2", async function () {
       let addrOne = contractOne.address.toLowerCase();
       let addrTwo = contractTwo.address.toLowerCase();
       let addrThree = contractThree.address.toLowerCase();

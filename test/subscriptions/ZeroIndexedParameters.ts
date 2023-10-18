@@ -6,17 +6,16 @@ chai.use(deepEqualInAnyOrder);
 import {expect} from "chai";
 import {Contract} from "ethers";
 import hre, {ethers} from "hardhat";
-import {parallelizer} from "../../helpers";
 import {Event, waitForEvents} from "./shared";
 
 describe("Subscriptions functionality", function () {
   let contract: Contract;
   let eventsContract: Contract;
   let senderAddress: string;
-  //before(async function () {
-  //  contract = await parallelizer.deployContract("Subscriptions");
-  //  senderAddress = await contract.signer.getAddress();
-  //});
+  before(async function () {
+    contract = await hre.deployContract("Subscriptions");
+    senderAddress = await contract.signer.getAddress();
+  });
 
   beforeEach(async function () {
     const provider = new ethers.providers.WebSocketProvider(hre.getWebsocketUrl());
@@ -28,7 +27,7 @@ describe("Subscriptions functionality", function () {
   });
 
   describe("When event is triggered with zero indexed parameters", function () {
-    xit("Should receive event regardless of provided filters", async function () {
+    it("Should receive event regardless of provided filters", async function () {
       let receivedEvents: Event[] = [];
       const filter = eventsContract.filters.Event0();
       eventsContract.on(filter, (from, to, amount, _event) => {

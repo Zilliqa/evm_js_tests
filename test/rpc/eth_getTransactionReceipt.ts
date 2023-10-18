@@ -1,27 +1,28 @@
 import sendJsonRpcRequest from "../../helpers/JsonRpcHelper";
 import {assert} from "chai";
 import hre from "hardhat";
-import {parallelizer} from "../../helpers";
 import {ethers} from "hardhat";
 import logDebug from "../../helpers/DebugHelper";
 
 const METHOD = "eth_getTransactionReceipt";
 
-describe("Calling " + METHOD, function () {
+describe(`Calling ${METHOD} #parallel`, function () {
   before(async function () {
     if (!hre.isZilliqaNetworkSelected()) {
       this.skip();
     }
   });
 
-  xit("should return the raw transaction response", async function () {
-    let amount = 200_000;
+  it("should return the raw transaction response @block-1", async function () {
+    let amount = 10_000;
     // send amount from primary to secondary account
     const to = ethers.Wallet.createRandom();
-    const {response, signer_address} = await parallelizer.sendTransaction({
+    const signer = hre.allocateEthSigner();
+    const response = await signer.sendTransaction({
       to: to.address,
       value: amount
     });
+    hre.releaseEthSigner(signer);
     const transactionHash = response.hash;
     await response.wait();
 
@@ -36,9 +37,9 @@ describe("Calling " + METHOD, function () {
       assert.isString(result.result.status, "Is not a string");
       assert.equal(result.result.status, "0x1", "Expected to be equal to 0x1");
 
-      //// root
-      //assert.isString(result.result.root, "Is not a string");
-      //assert.match(result.result.root, /^0x/, "Should be HEX starting with 0x");
+      // root
+      assert.isString(result.result.root, "Is not a string");
+      assert.match(result.result.root, /^0x/, "Should be HEX starting with 0x");
 
       // cumulativeGasUsed
       assert.isString(result.result.cumulativeGasUsed, "Is not a string");
@@ -76,8 +77,8 @@ describe("Calling " + METHOD, function () {
       assert.match(result.result.from, /^0x/, "Should be HEX starting with 0x");
       assert.equal(
         result.result.from.toUpperCase(),
-        signer_address.toUpperCase(),
-        "Is not equal to " + signer_address.toUpperCase()
+        signer.address.toUpperCase(),
+        "Is not equal to " + signer.address.toUpperCase()
       );
 
       // blockHash

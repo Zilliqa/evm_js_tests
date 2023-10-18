@@ -6,7 +6,6 @@ chai.use(deepEqualInAnyOrder);
 import {expect} from "chai";
 import {Contract} from "ethers";
 import hre, {ethers} from "hardhat";
-import {parallelizer} from "../../helpers";
 import {Event, waitForEvents} from "./shared";
 import {WebSocketProvider} from "@ethersproject/providers";
 
@@ -15,10 +14,10 @@ describe("Subscriptions functionality", function () {
   let eventsContract: Contract;
   let senderAddress: string;
   let provider: WebSocketProvider;
-  //before(async function () {
-  //  contract = await parallelizer.deployContract("Subscriptions");
-  //  senderAddress = await contract.signer.getAddress();
-  //});
+  before(async function () {
+    contract = await hre.deployContract("Subscriptions");
+    senderAddress = await contract.signer.getAddress();
+  });
 
   beforeEach(async function () {
     provider = new ethers.providers.WebSocketProvider(hre.getWebsocketUrl());
@@ -30,8 +29,8 @@ describe("Subscriptions functionality", function () {
   });
 
   describe("When two subscribers listen to events", function () {
-    xit("Should receive an event coming only from contract xit is subscribed to", async function () {
-      const secondContract = await parallelizer.deployContract("Subscriptions");
+    it("Should receive an event coming only from contract it is subscribed to", async function () {
+      const secondContract = await hre.deployContract("Subscriptions");
       const secondProvider = new ethers.providers.WebSocketProvider(hre.getWebsocketUrl());
       const secondEventsContract = new ethers.Contract(
         secondContract.address,
@@ -67,7 +66,7 @@ describe("Subscriptions functionality", function () {
       expect(receivedEvents).to.have.length(2);
       expect(secondContractReceivedEvents).to.have.length(1);
     });
-    xit("Should deliver event to both", async function () {
+    it("Should deliver event to both", async function () {
       const secondEventsContract = new ethers.Contract(contract.address, contract.interface, provider);
 
       let receivedEvents: Event[] = [];

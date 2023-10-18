@@ -1,21 +1,22 @@
 import {expect} from "chai";
-import {Contract, Signer} from "ethers";
+import {Contract} from "ethers";
 import hre from "hardhat";
 import {ScillaContract} from "hardhat-scilla-plugin";
 import {parallelizer} from "../helpers";
+import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
 
-describe.skip("ERC20 Interop", function () {
+describe("ERC20 Interop", function () {
   let zrc2_contract: ScillaContract;
   let bridge_contract: Contract;
-  let contractOwner: Signer;
-  let alice: Signer;
+  let contractOwner: SignerWithAddress;
+  let alice: SignerWithAddress;
 
   before(async function () {
     if (!hre.isZilliqaNetworkSelected() || !hre.isScillaTestingEnabled()) {
       this.skip();
     }
 
-    contractOwner = await parallelizer.takeSigner();
+    contractOwner = hre.allocateEthSigner();
 
     zrc2_contract = await parallelizer.deployScillaContract(
       "ZRC2Interop",
@@ -25,12 +26,16 @@ describe.skip("ERC20 Interop", function () {
       2,
       1_000
     );
-    alice = await parallelizer.takeSigner();
-    bridge_contract = await parallelizer.deployContractWithSigner(
-      contractOwner,
+    alice = hre.allocateEthSigner();
+    bridge_contract = await hre.deployContractWithSigner(
       "ERC20Interop",
+      contractOwner,
       zrc2_contract.address?.toLowerCase()
     );
+  });
+
+  after(() => {
+    hre.releaseEthSigner(contractOwner, alice);
   });
 
   it("Interop Should be deployed successfully", async function () {
@@ -77,7 +82,7 @@ describe.skip("ERC20 Interop", function () {
   });
 
   it("Should not be possible to mint or burn tokens by contract non-owner", async function () {
-    expect (bridge_contract.connect(alice).burnZRC2(await alice.getAddress(), 50)).to.be.reverted;
+    expect(bridge_contract.connect(alice).burnZRC2(await alice.getAddress(), 50)).to.be.reverted;
     let aliceTokens = await bridge_contract.connect(alice).balanceOfZRC2(await alice.getAddress());
     expect(aliceTokens).to.be.eq(50);
 

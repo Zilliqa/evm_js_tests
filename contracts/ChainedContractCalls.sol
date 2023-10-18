@@ -13,6 +13,7 @@ contract ContractOne {
 
     function chainedCall(address payable[] memory destinations, uint index) public returns(bool success)
     {
+
         if (destinations.length > index) {
             ContractTwo two = ContractTwo(destinations[index]);
 

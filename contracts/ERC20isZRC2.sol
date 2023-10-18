@@ -37,6 +37,10 @@ interface ERC20Interface {
 
     function mint(address recipient, uint128 amount) external returns (bool);
     function burn(address recipient, uint128 amount) external returns (bool);
+
+    event TransferEvent();
+    event IncreasedAllowanceEvent();
+    event DecreasedAllowanceEvent();
 }
 
 contract ERC20isZRC2 is ERC20Interface, SafeMath {
@@ -54,12 +58,21 @@ contract ERC20isZRC2 is ERC20Interface, SafeMath {
         return _read_scilla_uint128("total_supply");
     }
 
+    function initSupply() external view returns (uint128) {
+        return _read_scilla_uint128("init_supply");
+    }
+
+    function tokenName() external view returns (string memory) {
+        return _read_scilla_string("name");
+    }
+
     function balanceOf(address tokenOwner) external view returns (uint128) {
         return _read_scilla_map_uint128("balances", tokenOwner);
     }
 
     function transfer(address to, uint128 tokens) external returns (bool) {
         _call_scilla_two_args("Transfer", to, tokens);
+        emit TransferEvent();
         return true;
     }
 
@@ -81,9 +94,11 @@ contract ERC20isZRC2 is ERC20Interface, SafeMath {
         uint128 current_allowance = _read_scilla_nested_map_uint128("allowances", msg.sender, spender);
         if (current_allowance >= new_allowance) {
             _call_scilla_two_args("DecreaseAllowance", spender, current_allowance - new_allowance);
+            emit DecreasedAllowanceEvent();
         }
         else {
             _call_scilla_two_args("IncreaseAllowance", spender, new_allowance - current_allowance);
+            emit IncreasedAllowanceEvent();
         }
         return true;
     }
@@ -161,4 +176,43 @@ contract ERC20isZRC2 is ERC20Interface, SafeMath {
         return allowance;
     }
 
+    function _read_scilla_string(string memory variable_name) public view returns (string memory retVal) {
+        bytes memory encodedArgs = abi.encode(_zrc2_address, variable_name);
+        uint256 argsLength = encodedArgs.length;
+        bool success;
+        bytes memory output = new bytes(128);
+        uint256 output_len = output.length - 4;
+        assembly {
+            success := staticcall(21000, 0x5a494c92, add(encodedArgs, 0x20), argsLength, add(output, 0x20), output_len)
+        }
+        require(success);
+
+        (retVal) = abi.decode(output, (string));
+        return retVal;
+    }
+
+}
+
+interface ERC165 {
+    /// @notice Query if a contract implements an interface
+    /// @param interfaceID The interface identifier, as specified in ERC-165
+    /// @dev Interface identification is specified in ERC-165. This function
+    ///  uses less than 30,000 gas.
+    /// @return `true` if the contract implements `interfaceID` and
+    ///  `interfaceID` is not 0xffffffff, `false` otherwise
+    function supportsInterface(bytes4 interfaceID) external view returns (bool);
+}
+
+interface ScillaReceiver {
+    function handle_scilla_message(string memory, bytes calldata) external payable;
+}
+
+contract ContractSupportingScillaReceiver is ERC165{
+    function supportsInterface(bytes4 interfaceID) external view returns (bool) {
+        return
+        interfaceID == this.supportsInterface.selector || // ERC165
+        interfaceID == this.handle_scilla_message.selector; // ScillaReceiver
+    }
+
+    function handle_scilla_message(string memory, bytes calldata) external payable {}
 }

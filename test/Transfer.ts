@@ -1,7 +1,6 @@
 import {assert, expect} from "chai";
-import {BigNumber} from "ethers";
-import {ethers} from "hardhat";
-import {parallelizer} from "../helpers";
+import {BigNumber, Contract} from "ethers";
+import hre, {ethers} from "hardhat";
 
 const FUND = ethers.utils.parseUnits("1", "gwei");
 
@@ -10,59 +9,64 @@ async function getFee(hash: string) {
   return res.gasUsed.mul(res.effectiveGasPrice);
 }
 
-describe("ForwardZil contract functionality", function () {
+describe("ForwardZil contract functionality #parallel", function () {
+  let contract: Contract;
   before(async function () {
-    //this.contract = await parallelizer.deployContract("ForwardZil");
-    //this.signer = this.contract.signer;
+    contract = await hre.deployContract("ForwardZil");
   });
 
-  xit("Should return zero as the initial balance of the contract", async function () {
-    expect(await ethers.provider.getBalance(this.contract.address)).to.be.eq(0);
+  it("Should return zero as the initial balance of the contract @block-1", async function () {
+    expect(await ethers.provider.getBalance(contract.address)).to.be.eq(0);
   });
 
-  xit(`Should move ${ethers.utils.formatEther(FUND)} ethers to the contract if deposit is called`, async function () {
-    expect(await this.contract.deposit({value: FUND})).changeEtherBalance(this.contract.address, FUND);
+  it(`Should move ${ethers.utils.formatEther(
+    FUND
+  )} ethers to the contract if deposit is called @block-1`, async function () {
+    await contract.deposit({value: FUND});
+    expect(await ethers.provider.getBalance(contract.address)).to.be.eq(FUND);
   });
 
   // TODO: Add notPayable contract function test.
 
-  xit("Should move 1 ether to the owner if withdraw function is called so 1 ether is left for the contract itself [@transactional]", async function () {
-    expect(await this.contract.withdraw()).to.changeEtherBalances(
-      [this.contract.address, this.signer.address],
+  it("Should move 1 ether to the owner if withdraw function is called so 1 ether is left for the contract itself [@transactional]", async function () {
+    expect(await contract.withdraw()).to.changeEtherBalances(
+      [contract.address, await contract.signer.getAddress()],
       [ethers.utils.parseEther("-1.0"), ethers.utils.parseEther("1.0")],
       {includeFee: true}
     );
   });
 
-  xit("should be possible to transfer ethers to the contract", async function () {
-    const prevBalance = await ethers.provider.getBalance(this.contract.address);
-    const tx = await parallelizer.sendTransaction({
-      to: this.contract.address,
+  it("should be possible to transfer ethers to the contract @block-2", async function () {
+    const prevBalance = await ethers.provider.getBalance(contract.address);
+    const {response} = await hre.sendEthTransaction({
+      to: contract.address,
       value: FUND
     });
 
     // Get transaction receipt for the tx
-    const receipt = await tx.response.wait();
+    await response.wait();
 
-    const currentBalance = await ethers.provider.getBalance(this.contract.address);
+    const currentBalance = await ethers.provider.getBalance(contract.address);
     expect(currentBalance.sub(prevBalance)).to.be.eq(FUND);
   });
 });
 
-describe("Transfer ethers", function () {
-  xit("should be possible to transfer ethers to a user account", async function () {
+describe("Transfer ethers #parallel", function () {
+  it("should be possible to transfer ethers to a user account @block-1", async function () {
     const payee = ethers.Wallet.createRandom();
 
-    await parallelizer.sendTransaction({
+    const {response} = await hre.sendEthTransaction({
       to: payee.address,
       value: FUND
     });
 
+    await response.wait();
+
     expect(await ethers.provider.getBalance(payee.address)).to.be.eq(FUND);
   });
 
-  it("should be possible to batch transfer using a smart contract", async function () {
-    const ACCOUNTS_COUNT = 1;
+  it("should be possible to batch transfer using a smart contract @block-1", async function () {
+    const ACCOUNTS_COUNT = 3;
     const ACCOUNT_VALUE = 1_000_000;
 
     const accounts = Array.from({length: ACCOUNTS_COUNT}, (v, k) =>
@@ -71,21 +75,17 @@ describe("Transfer ethers", function () {
 
     const addresses = accounts.map((signer) => signer.address);
 
-    let tx = await parallelizer.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
+    await hre.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
       value: ACCOUNTS_COUNT * ACCOUNT_VALUE
     });
-
-    console.log(addresses);
-    console.log(tx.address);
-    console.log(tx.deployTransaction.from);
 
     const balances = await Promise.all(accounts.map((account) => account.getBalance()));
     balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));
   });
 
-  xit("should be possible to batch transfer using a smart contract and get funds back on self destruct", async function () {
+  it("should be possible to batch transfer using a smart contract and get funds back on self destruct @block-1", async function () {
     const ACCOUNTS_COUNT = 3;
-    const ACCOUNT_VALUE = 1_000_000_000;
+    const ACCOUNT_VALUE = ethers.utils.parseEther("0.1");
 
     const [owner] = await ethers.getSigners();
     let initialOwnerBal = await ethers.provider.getBalance(owner.address);
@@ -96,11 +96,9 @@ describe("Transfer ethers", function () {
 
     const addresses = accounts.map((signer) => signer.address);
 
-    const BatchTransferContract = await ethers.getContractFactory("BatchTransferCtor");
-    const batchTrans = await BatchTransferContract.deploy(addresses, ACCOUNT_VALUE, {
-      value: (ACCOUNTS_COUNT + 2) * ACCOUNT_VALUE
+    const batchTrans = await hre.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
+      value: ACCOUNT_VALUE.mul(ACCOUNTS_COUNT + 2)
     });
-    await batchTrans.deployed();
 
     const fee1 = await getFee(batchTrans.deployTransaction.hash);
 
@@ -109,7 +107,7 @@ describe("Transfer ethers", function () {
     const diff = initialOwnerBal.sub(finalOwnerBal).sub(fee1);
 
     // We will see that our account is down 5x, selfdestruct should have returned the untransfered funds
-    if (diff.toNumber() > ACCOUNT_VALUE * 4) {
+    if (diff > ACCOUNT_VALUE.mul(4)) {
       assert.equal(true, false, "We did not get a full refund from the selfdestruct. Balance drained: " + diff);
     }
 
@@ -117,26 +115,7 @@ describe("Transfer ethers", function () {
     balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));
   });
 
-  // FIXME: https://zilliqa-jira.atlassian.net/browse/ZIL-5082
-  xit("should be possible to batch transfer using a smart contract with full precision", async function () {
-    const ACCOUNTS_COUNT = 3;
-    const ACCOUNT_VALUE = 1_234_567;
-
-    const accounts = Array.from({length: ACCOUNTS_COUNT}, (v, k) =>
-      ethers.Wallet.createRandom().connect(ethers.provider)
-    );
-
-    const addresses = accounts.map((signer) => signer.address);
-
-    await parallelizer.deployContract("BatchTransferCtor", addresses, ACCOUNT_VALUE, {
-      value: ACCOUNTS_COUNT * ACCOUNT_VALUE
-    });
-
-    const balances = await Promise.all(accounts.map((account) => account.getBalance()));
-    balances.forEach((el) => expect(el).to.be.eq(ACCOUNT_VALUE));
-  });
-
-  xit("probably should be possible to use sent funds of smart contract", async function () {
+  it("probably should be possible to use sent funds of smart contract", async function () {
     const TRANSFER_VALUE = 1_000_000;
 
     // Create random account
@@ -146,14 +125,14 @@ describe("Transfer ethers", function () {
     let initialBal = await ethers.provider.getBalance(randomAccount);
     expect(initialBal).to.be.eq(0);
 
-    const [owner] = await ethers.getSigners();
+    const owner = hre.allocateEthSigner();
     let InitialOwnerbal = await ethers.provider.getBalance(owner.address);
 
     // check enough funds + gas
     expect(InitialOwnerbal).to.be.at.least(TRANSFER_VALUE * 1.1);
 
     // Deploy the contract
-    const singleTransfer = await parallelizer.deployContract("SingleTransfer");
+    const singleTransfer = await hre.deployContractWithSigner("SingleTransfer", owner);
 
     // call SC with a value to move funds across
     await singleTransfer.doTransfer(randomAccount, TRANSFER_VALUE, {
@@ -164,14 +143,16 @@ describe("Transfer ethers", function () {
     const receivedBal = await ethers.provider.getBalance(randomAccount);
 
     expect(receivedBal).to.be.eq(TRANSFER_VALUE);
+    hre.releaseEthSigner(owner);
   });
 
+  // Disabled in q4-working-branch
   xit("should return check gas and funds consistency", async function () {
     let rndAccount = ethers.Wallet.createRandom();
 
     const FUND = BigNumber.from(200_000_000_000_000_000n);
 
-    const tx = await parallelizer.sendTransaction({
+    const tx = await hre.sendEthTransaction({
       to: rndAccount.address,
       value: FUND
     });

@@ -13,18 +13,18 @@ describe("Openzeppelin ERC20 functionality", function () {
   });
 
   describe("General", function () {
-    xit("Should return 1_000_000 as the total supply of the token", async function () {
+    it("Should return 1_000_000 as the total supply of the token", async function () {
       expect(await contract.totalSupply()).to.be.equal(TOTAL_SUPPLY);
     });
 
-    xit("Should return 1_000_000 for the owner's balance at the beginning", async function () {
+    it("Should return 1_000_000 for the owner's balance at the beginning", async function () {
       const [owner] = await ethers.getSigners();
       expect(await contract.balanceOf(owner.address)).to.eq(TOTAL_SUPPLY);
     });
   });
 
   describe("Transfer", function () {
-    xit("Should be possible to transfer GLD token from the owner to another [@transactional]", async function () {
+    it("Should be possible to transfer GLD token from the owner to another [@transactional]", async function () {
       const [owner, receiver] = await ethers.getSigners();
 
       expect(await contract.transfer(receiver.address, 1000))
@@ -33,7 +33,7 @@ describe("Openzeppelin ERC20 functionality", function () {
         .withArgs(owner.address, receiver.address, 1000);
     });
 
-    xit("Should not be possible to transfer GLD token by an arbitrary account", async function () {
+    it("Should not be possible to transfer GLD token by an arbitrary account", async function () {
       const [, , notOwner] = await ethers.getSigners();
 
       await expect(contract.connect(notOwner).transfer(notOwner.address, 1000)).to.be.revertedWith(
@@ -42,7 +42,7 @@ describe("Openzeppelin ERC20 functionality", function () {
       expect(await contract.balanceOf(notOwner.address)).to.be.eq(0);
     });
 
-    xit("Should not be possible to move more than available tokens to some address", async function () {
+    it("Should not be possible to move more than available tokens to some address", async function () {
       const [_, receiver] = await ethers.getSigners();
       const totalSupply = await contract.totalSupply();
 
@@ -54,7 +54,7 @@ describe("Openzeppelin ERC20 functionality", function () {
   });
 
   describe("Transfer From", function () {
-    xit("Should not be possible to transfer from one account to another if allowance is insufficient", async function () {
+    it("Should not be possible to transfer from one account to another if allowance is insufficient", async function () {
       const [_, sender, spender] = await ethers.getSigners();
 
       // Fund the 2nd account first
@@ -65,7 +65,7 @@ describe("Openzeppelin ERC20 functionality", function () {
       );
     });
 
-    xit("Should be possible to transfer from one account to another if allowance is ok[@transactional]", async function () {
+    it("Should be possible to transfer from one account to another if allowance is ok[@transactional]", async function () {
       const [owner, sender, spender] = await ethers.getSigners();
 
       // Fund the 2nd account first

@@ -59,7 +59,7 @@ const config: HardhatUserConfig = {
         "0000000000000000000000000000000000000000000000000000000000000003",
         "0000000000000000000000000000000000000000000000000000000000000004"
       ],
-      chainId: 33468,
+      chainId: 32769,
       web3ClientVersion: "zilliqa2/v0.1.0",
       protocolVersion: 0x41,
       zilliqaNetwork: true,
