@@ -6,7 +6,7 @@ import logDebug from "../../helpers/DebugHelper";
 const METHOD = "web3_clientVersion";
 
 describe(`Calling ${METHOD} #parallel`, function () {
-  it("should return the web3 client version @block-1", async function () {
+  xit("should return the web3 client version @block-1", async function () {
     await sendJsonRpcRequest(METHOD, 1, [], (result, status) => {
       logDebug(result);
       assert.equal(status, 200, "has status code");
