@@ -8,6 +8,7 @@ const {expectRevert} = require("@openzeppelin/test-helpers"); // No declaration 
 describe("Revert Contract Call", function () {
   let contract: Contract;
   let signer: SignerWithAddress;
+
   before(async function () {
     contract = await hre.deployContract("Revert");
     signer = contract.signer as SignerWithAddress;
@@ -36,8 +37,8 @@ describe("Revert Contract Call", function () {
 
   it("Should not be reverted despite its child possibly reverting", async function () {
     const owner = contract.signer;
-    await expect(contract.callChainReverted()).not.to.be.reverted;
-    await expect(contract.callChainOk()).not.to.be.reverted;
+    await expect((await contract.callChainReverted()).wait()).not.to.be.reverted;
+    await expect((await contract.callChainOk()).wait()).not.to.be.reverted;
   });
 
   it("Should be reverted without any reason if specified gasLimit is not enough to complete txn", async function () {
