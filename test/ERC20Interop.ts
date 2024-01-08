@@ -6,43 +6,53 @@ import {parallelizer} from "../helpers";
 import {SignerWithAddress} from "@nomiclabs/hardhat-ethers/signers";
 
 describe("ERC20 Interop", function () {
-//  let zrc2_contract: ScillaContract;
-//  let bridge_contract: Contract;
-//  let contractOwner: SignerWithAddress;
-//  let alice: SignerWithAddress;
-//
-//  before(async function () {
-//    if (!hre.isZilliqaNetworkSelected() || !hre.isScillaTestingEnabled()) {
-//      this.skip();
-//    }
-//
-//    contractOwner = hre.allocateEthSigner();
-//
-//    zrc2_contract = await parallelizer.deployScillaContract(
-//      "ZRC2Interop",
-//      await contractOwner.getAddress(),
-//      "ZRC2Interop Token",
-//      "SDT",
-//      2,
-//      1_000
-//    );
-//    alice = hre.allocateEthSigner();
-//    bridge_contract = await hre.deployContractWithSigner(
-//      "ERC20Interop",
-//      contractOwner,
-//      zrc2_contract.address?.toLowerCase()
-//    );
-//  });
-//
-//  after(() => {
-//    hre.releaseEthSigner(contractOwner, alice);
-//  });
-//
-//  it("Interop Should be deployed successfully", async function () {
-//    expect(zrc2_contract.address).to.be.properAddress;
-//    expect(bridge_contract.address).to.be.properAddress;
-//  });
-//
+  let zrc2_contract: ScillaContract;
+  let bridge_contract: Contract;
+  let contractOwner: SignerWithAddress;
+  let alice: SignerWithAddress;
+
+  before(async function () {
+    if (!hre.isZilliqaNetworkSelected() || !hre.isScillaTestingEnabled()) {
+      this.skip();
+    }
+
+    contractOwner = hre.allocateEthSigner();
+
+    console.log("Deploying ZRC2Interop...");
+
+    zrc2_contract = await parallelizer.deployScillaContract(
+      "ZRC2Interop",
+      await contractOwner.getAddress(),
+      "ZRC2Interop Token",
+      "SDT",
+      2,
+      1_000,{gasLimit: 2000000}
+    );
+
+    console.log("Deploying ERC20Interop done...");
+
+    alice = hre.allocateEthSigner();
+
+    console.log("Finished allocating signers...");
+
+    bridge_contract = await hre.deployContractWithSigner(
+      "ERC20Interop",
+      contractOwner,
+      zrc2_contract.address?.toLowerCase()
+    );
+
+    console.log("final");
+  });
+
+  after(() => {
+    hre.releaseEthSigner(contractOwner, alice);
+  });
+
+  it("Interop Should be deployed successfully", async function () {
+    expect(zrc2_contract.address).to.be.properAddress;
+    expect(bridge_contract.address).to.be.properAddress;
+  });
+
 //  it("Interop Should return correct contract owner from ZRC2", async function () {
 //    expect(await zrc2_contract.contract_owner()).to.be.eq(await contractOwner.getAddress());
 //  });

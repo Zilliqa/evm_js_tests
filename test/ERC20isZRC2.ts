@@ -23,43 +23,47 @@ function validateEvmEvent(evmEventName: string, contractAddress: string, event: 
 }
 
 describe("ERC20 Is ZRC2", function () {
-//  let zrc2_contract: ScillaContract;
-//  let erc20_contract: Contract;
-//  let erc165_contract: Contract;
-//  let contractOwner: SignerWithAddress;
-//  let alice: SignerWithAddress;
-//  let bob: SignerWithAddress;
-//
-//  before(async function () {
-//    if (!hre.isZilliqaNetworkSelected() || !hre.isScillaTestingEnabled()) {
-//      this.skip();
-//    }
-//
-//    contractOwner = hre.allocateEthSigner();
-//
-//    zrc2_contract = await parallelizer.deployScillaContract(
-//      "FungibleToken",
-//      await contractOwner.getAddress(),
-//      "ERC20isZRC2 Token",
-//      "SDT",
-//      2,
-//      1_000
-//    );
-//    alice = hre.allocateEthSigner();
-//    bob = hre.allocateEthSigner();
-//    erc20_contract = await hre.deployContractWithSigner(
-//      "ERC20isZRC2",
-//      contractOwner,
-//      zrc2_contract.address?.toLowerCase()
-//    );
-//
-//    erc165_contract = await hre.deployContractWithSigner("ContractSupportingScillaReceiver", contractOwner);
-//  });
-//
-//  after(() => {
-//    hre.releaseEthSigner(alice, bob, contractOwner);
-//  });
-//
+  let zrc2_contract: ScillaContract;
+  let erc20_contract: Contract;
+  let erc165_contract: Contract;
+  let contractOwner: SignerWithAddress;
+  let alice: SignerWithAddress;
+  let bob: SignerWithAddress;
+
+  before(async function () {
+    if (!hre.isZilliqaNetworkSelected() || !hre.isScillaTestingEnabled()) {
+      console.log("skipped!");
+      this.skip();
+    }
+
+    contractOwner = hre.allocateEthSigner();
+
+    console.log("deploying!");
+    zrc2_contract = await parallelizer.deployScillaContract(
+      "FungibleToken",
+      await contractOwner.getAddress(),
+      "ERC20isZRC2 Token",
+      "SDT",
+      2,
+      1_000
+    );
+    console.log("deployed!");
+
+    //alice = hre.allocateEthSigner();
+    //bob = hre.allocateEthSigner();
+    //erc20_contract = await hre.deployContractWithSigner(
+    //  "ERC20isZRC2",
+    //  contractOwner,
+    //  zrc2_contract.address?.toLowerCase()
+    //);
+
+    //erc165_contract = await hre.deployContractWithSigner("ContractSupportingScillaReceiver", contractOwner);
+  });
+
+  after(() => {
+    //hre.releaseEthSigner(alice, bob, contractOwner);
+  });
+
 //  it("Interop Should be deployed successfully", async function () {
 //    expect(zrc2_contract.address).to.be.properAddress;
 //    expect(erc20_contract.address).to.be.properAddress;

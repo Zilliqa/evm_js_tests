@@ -39,4 +39,5 @@ task("test")
       .map((value, index) => value.sub(newBalances[index]))
       .reduce((prev, current) => prev.add(current));
     console.log(`💰 ~${clc.blackBright.bold(hre.ethers.utils.formatEther(sum))} ZILs used`);
+    console.log(balances);
   });
